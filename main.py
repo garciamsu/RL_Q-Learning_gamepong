@@ -9,6 +9,8 @@ class Paddle:
         self.paddle.shapesize(stretch_wid=1, stretch_len=5)
         self.paddle.penup()
         self.paddle.goto(position)
+        self.lives_max = 3
+        self.lives = self.lives_max
 
     def move_left(self):
         x = self.paddle.xcor()
@@ -51,17 +53,19 @@ class Game:
     def __init__(self):
         self.window = turtle.Screen()
         self.window.title("Ping Pong para un Jugador")
-        self.window.bgcolor("black")
+        self.window.bgcolor("white")
         self.window.setup(width=800, height=600)
         self.window.tracer(0)
 
         self.score = 0
+        self.episodes = 0
+        self.episodes_max = 5
         self.paddle = Paddle((0, -250))
         self.ball = Ball()
 
         self.pen = turtle.Turtle()
         self.pen.speed(0)
-        self.pen.color("white")
+        self.pen.color("black")
         self.pen.penup()
         self.pen.hideturtle()
         self.pen.goto(0, 260)
@@ -75,7 +79,7 @@ class Game:
 
     def update_score(self):
         self.pen.clear()
-        self.pen.write(f"Puntaje: {self.score}", align="center", font=("Courier", 24, "normal"))
+        self.pen.write(f"Puntaje: {self.score}, Vidas: {self.paddle.lives} / {self.paddle.lives_max}, Episodio: {self.episodes} /  {self.episodes_max} ", align="center", font=("Courier", 24, "normal"))
 
     def check_collisions(self):
         # Rebote en el borde superior
@@ -92,20 +96,24 @@ class Game:
            (self.paddle.paddle.xcor() + 50 > self.ball.ball.xcor() > self.paddle.paddle.xcor() - 50):
             self.ball.ball.sety(-230)
             self.ball.bounce_y()
-            self.score += 1
+            self.score += 10
+            self.episodes += 1
             self.update_score()
 
         # Revisar si la pelota toca el borde inferior
         if self.ball.ball.ycor() < -290:
             self.ball.reset_position()
-            self.score = 0
+            self.score -= 10
+            self.episodes += 1
+            self.paddle.lives -= 1
             self.update_score()
 
     def run_game(self):
-        while True:
+        while self.score >= 0 and self.paddle.lives > 0 and self.episodes <= self.episodes_max:
             self.window.update()
             self.ball.move()
             self.check_collisions()
+        
 
 # Ejecutar el juego
 if __name__ == "__main__":

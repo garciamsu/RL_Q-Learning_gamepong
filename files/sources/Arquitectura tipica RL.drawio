@@ -1,0 +1,91 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36" version="24.7.7">
+  <diagram name="Página-1" id="O69KpWHo2CQKx25_TrIb">
+    <mxGraphModel dx="1867" dy="681" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-1" value="Agent&lt;div&gt;(Paddle)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=19;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="350" y="140" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-2" value="Environment&lt;div&gt;(Table + Ball)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=19;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="287" y="280" width="246" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-3" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="1M5YjZfz-k9XdCTFdonw-1" target="1M5YjZfz-k9XdCTFdonw-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="540" y="180" as="sourcePoint" />
+            <mxPoint x="590" y="130" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="630" y="170" />
+              <mxPoint x="630" y="310" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-4" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="1M5YjZfz-k9XdCTFdonw-2" target="1M5YjZfz-k9XdCTFdonw-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="250" y="260" as="sourcePoint" />
+            <mxPoint x="300" y="210" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="210" y="295" />
+              <mxPoint x="210" y="185" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-5" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;fontSize=25;strokeWidth=3;" edge="1" parent="1" source="1M5YjZfz-k9XdCTFdonw-2" target="1M5YjZfz-k9XdCTFdonw-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="330" as="sourcePoint" />
+            <mxPoint x="440" y="280" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="150" y="325" />
+              <mxPoint x="150" y="155" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-6" value="Action&#xa;At" style="text;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="634" y="215" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-7" value="reward&#xa;Rt" style="text;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="212" y="215" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-8" value="states&#xa;St" style="text;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="154" y="215" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-9" value="Rt+1" style="text;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="240" y="273" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-10" value="St+1" style="text;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="240" y="303" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-11" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="230" y="340" as="sourcePoint" />
+            <mxPoint x="230" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-12" value="The agent would be the player&#39;s paddle (or the AI ​​controlling the paddle)." style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="90" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-13" value="The environment would be the entire ping pong table, the ball and the walls that delimit the playing space." style="text;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="290" y="360" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-14" value="The possible actions of the agent would be to move the paddle up, down or keep it in the same position." style="text;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="690" y="210" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-16" value="A state could be the position of the ball at a given time, the speed of the ball, the position of the paddle, etc." style="text;whiteSpace=wrap;align=right;" vertex="1" parent="1">
+          <mxGeometry x="-70" y="210" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-17" value="The policy defines the strategy that the agent follows to choose the most appropriate action in each state. In ping pong, the policy could be something like &quot;if the ball is above the center of the table, move the paddle up.&quot;" style="text;whiteSpace=wrap;rounded=0;glass=0;labelBackgroundColor=none;labelBorderColor=none;textShadow=0;fontStyle=1;align=right;" vertex="1" parent="1">
+          <mxGeometry x="-186" y="70" width="340" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-18" value="The reward function determines how good a particular action was. In ping pong, a positive reward might be given for returning the ball correctly, while a negative reward might be given for losing the point." style="text;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="257" y="203" width="360" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-19" value="The value function assigns a number to each state, indicating how good it is to be in that state. For example, a state where the ball is close to the net and the paddle is well positioned would have a high value, as it increases the chances of winning the point." style="text;whiteSpace=wrap;align=left;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="600" y="60" width="350" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="1M5YjZfz-k9XdCTFdonw-20" value="The model is a representation of the environment that allows the agent to predict how the state will change when performing an action. In ping pong, a model might predict the trajectory of the ball after it is hit by the paddle." style="text;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="290" y="420" width="270" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
