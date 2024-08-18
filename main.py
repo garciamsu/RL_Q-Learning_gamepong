@@ -1,7 +1,12 @@
+from math import ceil
 import turtle
 
+import numpy as np
+
 class Paddle:
-    def __init__(self, position):
+    def __init__(self, position, game, policy=None, discount_factor = 0.1, learning_rate = 0.1, ratio_explotacion = 0.9):
+
+        # Inicializa el entorno grafico
         self.paddle = turtle.Turtle()
         self.paddle.speed(0)
         self.paddle.shape("square")
@@ -9,19 +14,35 @@ class Paddle:
         self.paddle.shapesize(stretch_wid=1, stretch_len=5)
         self.paddle.penup()
         self.paddle.goto(position)
+        
+        # Inicializa las condiciones del juego
         self.lives_max = 3
         self.lives = self.lives_max
+        self.actions = ['up','down']
+        self.movement = game.movement
+        
+        # Inicializa las variables y parametros de algoritmo Q-learning
+        self.discount_factor = discount_factor
+        self.learning_rate = learning_rate
+        self.ratio_explotacion = ratio_explotacion
+
+        if policy is not None:
+            self._Q_table = policy
+        else:
+            position = list(game.state_space.shape)
+            position.append(len(self.actions))
+            self._Q_table = np.zeros(position)
 
     def move_left(self):
         x = self.paddle.xcor()
         if x > -350:
-            x -= 30
+            x -= self.movement
         self.paddle.setx(x)
 
     def move_right(self):
         x = self.paddle.xcor()
         if x < 350:
-            x += 30
+            x += self.movement
         self.paddle.setx(x)
 
 class Ball:
@@ -50,17 +71,24 @@ class Ball:
         self.bounce_y()
 
 class Game:
-    def __init__(self):
+    def __init__(self, ai=False, width=800, height=600, movement=30):
+
         self.window = turtle.Screen()
         self.window.title("Ping Pong para un Jugador")
         self.window.bgcolor("white")
-        self.window.setup(width=800, height=600)
+        self.window.setup(width=width, height=height)
         self.window.tracer(0)
 
+        rows = ceil(height/movement)
+        columns = ceil(width/movement)
+        self.state_space = np.zeros((columns, columns, rows))
+
+        self.state = [0,0,0]
+        self.movement = movement
         self.score = 0
         self.episodes = 0
         self.episodes_max = 5
-        self.paddle = Paddle((0, -250))
+        self.paddle = Paddle((0, -250), game=self)
         self.ball = Ball()
 
         self.pen = turtle.Turtle()
@@ -72,8 +100,10 @@ class Game:
         self.update_score()
 
         self.window.listen()
-        self.window.onkeypress(self.paddle.move_left, "Left")
-        self.window.onkeypress(self.paddle.move_right, "Right")
+
+        if ai == False:
+            self.window.onkeypress(self.paddle.move_left, "Left")
+            self.window.onkeypress(self.paddle.move_right, "Right")
 
         self.run_game()
 
@@ -115,6 +145,6 @@ class Game:
             self.check_collisions()
         
 
-# Ejecutar el juego
+# Ejecutar el juegox
 if __name__ == "__main__":
-    Game()
+    Game(ai=False)
