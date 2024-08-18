@@ -1,4 +1,4 @@
-from math import ceil
+from math import ceil, floor
 import turtle
 
 import numpy as np
@@ -16,10 +16,9 @@ class Paddle:
         self.paddle.goto(position)
         
         # Inicializa las condiciones del juego
-        self.lives_max = 3
-        self.lives = self.lives_max
-        self.actions = ['up','down']
+        self.lives = game.lives_max
         self.movement = game.movement
+        self.actions = ['lelf','right']
         
         # Inicializa las variables y parametros de algoritmo Q-learning
         self.discount_factor = discount_factor
@@ -44,6 +43,20 @@ class Paddle:
         if x < 350:
             x += self.movement
         self.paddle.setx(x)
+      
+    def update(self, game, old_state, action_taken, reward_action_taken, new_state, reached_end):
+        idx_action_taken =list(game.action_space).index(action_taken)
+
+        actual_q_value_options = self._q_table[old_state[0], old_state[1], old_state[2]]
+        actual_q_value = actual_q_value_options[idx_action_taken]
+
+        future_q_value_options = self._q_table[new_state[0], new_state[1], new_state[2]]
+        future_max_q_value = reward_action_taken  +  self.discount_factor*future_q_value_options.max()
+        if reached_end:
+            future_max_q_value = reward_action_taken #maximum reward
+
+        self._q_table[old_state[0], old_state[1], old_state[2], idx_action_taken] = actual_q_value + \
+                                              self.learning_rate*(future_max_q_value -actual_q_value)
 
 class Ball:
     def __init__(self):
@@ -71,7 +84,7 @@ class Ball:
         self.bounce_y()
 
 class Game:
-    def __init__(self, ai=False, width=800, height=600, movement=30):
+    def __init__(self, episodes_max, lives_max, width, height, movement, discount_factor, learning_rate, ratio_explotacion, ai=False):
 
         self.window = turtle.Screen()
         self.window.title("Ping Pong para un Jugador")
@@ -82,13 +95,18 @@ class Game:
         rows = ceil(height/movement)
         columns = ceil(width/movement)
         self.state_space = np.zeros((columns, columns, rows))
-
-        self.state = [0,0,0]
         self.movement = movement
-        self.score = 0
-        self.episodes = 0
-        self.episodes_max = 5
-        self.paddle = Paddle((0, -250), game=self)
+
+        self.episodes_max = episodes_max
+        self.lives_max = lives_max
+        self.discount_factor = discount_factor
+        self.learning_rate = learning_rate
+        self.ratio_explotacion = ratio_explotacion
+
+        self.reset()
+
+        self.paddle = Paddle((0, -250), discount_factor, learning_rate, ratio_explotacion, game=self)
+        self.paddle.lives_max = lives_max
         self.ball = Ball()
 
         self.pen = turtle.Turtle()
@@ -109,7 +127,7 @@ class Game:
 
     def update_score(self):
         self.pen.clear()
-        self.pen.write(f"Puntaje: {self.score}, Vidas: {self.paddle.lives} / {self.paddle.lives_max}, Episodio: {self.episodes} /  {self.episodes_max} ", align="center", font=("Courier", 24, "normal"))
+        self.pen.write(f"Puntaje: {self.score}, Vidas: {self.paddle.lives} / {self.paddle.lives_max}, Jugadas: {self.plays}", align="center", font=("Courier", 24, "normal"))
 
     def check_collisions(self):
         # Rebote en el borde superior
@@ -127,24 +145,67 @@ class Game:
             self.ball.ball.sety(-230)
             self.ball.bounce_y()
             self.score += 10
-            self.episodes += 1
+            self.plays += 1
             self.update_score()
 
         # Revisar si la pelota toca el borde inferior
         if self.ball.ball.ycor() < -290:
             self.ball.reset_position()
             self.score -= 10
-            self.episodes += 1
+            self.plays += 1
             self.paddle.lives -= 1
             self.update_score()
 
+    def reset(self):
+        self.state = [0,0,0]
+        self.score = 0
+        self.plays = 0
+    
+    def step(self, action):
+
+        if action == "left":
+            self.paddle.move_left
+        elif action == "right":
+            self.paddle.move_right
+            
+        self.window.update()        
+        self.ball.move()
+        self.check_collisions()
+
+        self.state = (floor(self.paddle.xcor()), floor(self.ball.ycor()), floor(self.ball.xcor()))
+        done = self.lives <=0 # final
+        reward = self.score
+
+        return self.state, reward , done
+
     def run_game(self):
-        while self.score >= 0 and self.paddle.lives > 0 and self.episodes <= self.episodes_max:
-            self.window.update()
-            self.ball.move()
-            self.check_collisions()
-        
+
+        for episode in range(self.episodes_max):
+            # Inicializar el episodio
+            self.reset()
+    
+            while self.score >= 0 and self.paddle.lives > 0:
+
+                old_state = np.array(self.state)
+                # Elegir acción usando la política epsilon-greedy            
+                if np.random.uniform() <= self.ratio_explotacion:
+                    # Tomar el maximo
+                    index_action = np.random.choice(np.flatnonzero(
+                            self.paddle._Q_table[self.state[0],self.state[1],self.state[2]] == self.paddle._Q_table[self.state[0],self.state[1],self.state[2]].max()
+                        ))
+                    next_action = list(self.actions)[index_action]
+                else:
+                    next_action = np.random.choice(list(self.actions))
+
+                # Realizar acción y observar el resultado
+                state, reward, done = self.step(next_action)
+
+                # Actualizar Q-valor
+                if episode > 1:
+                    self.paddle.update(self, old_state, next_action, reward, state, done)
+                
+
 
 # Ejecutar el juegox
 if __name__ == "__main__":
-    Game(ai=False)
+    Game(ai=False, episodes_max=10, lives_max=3, width=800, height=600, movement=30, discount_factor = 0.1, learning_rate = 0.1, ratio_explotacion = 0.9)
