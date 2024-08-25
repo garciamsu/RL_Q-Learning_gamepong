@@ -3,87 +3,89 @@ import turtle
 
 import numpy as np
 
-class Paddle:
-    def __init__(self, position, game, policy=None, discount_factor = 0.1, learning_rate = 0.1, ratio_explotacion = 0.9):
-
-        # Inicializa el entorno grafico
-        self.paddle = turtle.Turtle()
-        self.paddle.speed(0)
-        self.paddle.shape("square")
-        self.paddle.color("blue")
-        self.paddle.shapesize(stretch_wid=1, stretch_len=5)
-        self.paddle.penup()
-        self.paddle.goto(position)
-        
-        # Inicializa las condiciones del juego
-        self.lives = game.lives_max
-        self.movement = game.movement
-        self.actions = ['lelf','right']
-        
-        # Inicializa las variables y parametros de algoritmo Q-learning
-        self.discount_factor = discount_factor
-        self.learning_rate = learning_rate
-        self.ratio_explotacion = ratio_explotacion
-
-        if policy is not None:
-            self._Q_table = policy
-        else:
-            position = list(game.state_space.shape)
-            position.append(len(self.actions))
-            self._Q_table = np.zeros(position)
-
-    def move_left(self):
-        x = self.paddle.xcor()
-        if x > -350:
-            x -= self.movement
-        self.paddle.setx(x)
-
-    def move_right(self):
-        x = self.paddle.xcor()
-        if x < 350:
-            x += self.movement
-        self.paddle.setx(x)
-      
-    def update(self, game, old_state, action_taken, reward_action_taken, new_state, reached_end):
-        idx_action_taken =list(game.action_space).index(action_taken)
-
-        actual_q_value_options = self._q_table[old_state[0], old_state[1], old_state[2]]
-        actual_q_value = actual_q_value_options[idx_action_taken]
-
-        future_q_value_options = self._q_table[new_state[0], new_state[1], new_state[2]]
-        future_max_q_value = reward_action_taken  +  self.discount_factor*future_q_value_options.max()
-        if reached_end:
-            future_max_q_value = reward_action_taken #maximum reward
-
-        self._q_table[old_state[0], old_state[1], old_state[2], idx_action_taken] = actual_q_value + \
-                                              self.learning_rate*(future_max_q_value -actual_q_value)
-
-class Ball:
-    def __init__(self):
-        self.ball = turtle.Turtle()
-        self.ball.speed(0)
-        self.ball.shape("circle")
-        self.ball.color("red")
-        self.ball.penup()
-        self.ball.goto(0, 0)
-        self.ball.dx = 0.2
-        self.ball.dy = 0.2
-
-    def move(self):
-        self.ball.setx(self.ball.xcor() + self.ball.dx)
-        self.ball.sety(self.ball.ycor() + self.ball.dy)
-
-    def bounce_y(self):
-        self.ball.dy *= -1
-
-    def bounce_x(self):
-        self.ball.dx *= -1
-
-    def reset_position(self):
-        self.ball.goto(0, 0)
-        self.bounce_y()
-
 class Game:
+
+    class Ball:
+        def __init__(self):
+            self.ball = turtle.Turtle()
+            self.ball.speed(0)
+            self.ball.shape("circle")
+            self.ball.color("red")
+            self.ball.penup()
+            self.ball.goto(0, 0)
+            self.ball.dx = 0.2
+            self.ball.dy = 0.2
+
+        def move(self):
+            self.ball.setx(self.ball.xcor() + self.ball.dx)
+            self.ball.sety(self.ball.ycor() + self.ball.dy)
+
+        def bounce_y(self):
+            self.ball.dy *= -1
+
+        def bounce_x(self):
+            self.ball.dx *= -1
+
+        def reset_position(self):
+            self.ball.goto(0, 0)
+            self.bounce_y()
+
+    class Paddle:
+        def __init__(self, position, game, policy=None):
+
+            # Inicializa el entorno grafico
+            self.paddle = turtle.Turtle()
+            self.paddle.speed(0)
+            self.paddle.shape("square")
+            self.paddle.color("blue")
+            self.paddle.shapesize(stretch_wid=1, stretch_len=5)
+            self.paddle.penup()
+            self.paddle.goto(position)
+            
+            # Inicializa las condiciones del juego
+            self.lives = game.lives_max
+            self.lives_max = game.lives_max
+            self.movement = game.movement
+            self.actions = ['lelf','right']
+            
+            # Inicializa las variables y parametros de algoritmo Q-learning
+            self.discount_factor = game.discount_factor
+            self.learning_rate = game.learning_rate
+            self.ratio_explotacion = game.ratio_explotacion
+
+            if policy is not None:
+                self._Q_table = policy
+            else:
+                position = list(game.state_space.shape)
+                position.append(len(self.actions))
+                self._Q_table = np.zeros(position)
+
+        def move_left(self):
+            x = self.xcor()
+            if x > -350:
+                x -= self.movement
+            self.paddle.setx(x)
+
+        def move_right(self):
+            x = self.xcor()
+            if x < 350:
+                x += self.movement
+            self.paddle.setx(x)
+        
+        def update(self, game, old_state, action_taken, reward_action_taken, new_state, reached_end):
+            idx_action_taken =list(game.action_space).index(action_taken)
+
+            actual_q_value_options = self._q_table[old_state[0], old_state[1], old_state[2]]
+            actual_q_value = actual_q_value_options[idx_action_taken]
+
+            future_q_value_options = self._q_table[new_state[0], new_state[1], new_state[2]]
+            future_max_q_value = reward_action_taken  +  self.discount_factor*future_q_value_options.max()
+            if reached_end:
+                future_max_q_value = reward_action_taken #maximum reward
+
+            self._q_table[old_state[0], old_state[1], old_state[2], idx_action_taken] = actual_q_value + \
+                                                self.learning_rate*(future_max_q_value -actual_q_value)
+
     def __init__(self, episodes_max, lives_max, width, height, movement, discount_factor, learning_rate, ratio_explotacion, ai=False):
 
         self.window = turtle.Screen()
@@ -105,9 +107,8 @@ class Game:
 
         self.reset()
 
-        self.paddle = Paddle((0, -250), discount_factor, learning_rate, ratio_explotacion, game=self)
-        self.paddle.lives_max = lives_max
-        self.ball = Ball()
+        self.paddle = self.Paddle((0, -250), self)
+        self.ball = self.Ball()
 
         self.pen = turtle.Turtle()
         self.pen.speed(0)
@@ -172,8 +173,9 @@ class Game:
         self.ball.move()
         self.check_collisions()
 
-        self.state = (floor(self.paddle.xcor()), floor(self.ball.ycor()), floor(self.ball.xcor()))
-        done = self.lives <=0 # final
+        print(self.ball.ball)
+        self.state = (floor(1.1), floor(self.ball.ball.ycor()), floor(self.ball.ball.xcor()))
+        done = self.paddle.lives <=0 # final
         reward = self.score
 
         return self.state, reward , done
@@ -188,21 +190,21 @@ class Game:
 
                 old_state = np.array(self.state)
                 # Elegir acción usando la política epsilon-greedy            
-                if np.random.uniform() <= self.ratio_explotacion:
-                    # Tomar el maximo
-                    index_action = np.random.choice(np.flatnonzero(
-                            self.paddle._Q_table[self.state[0],self.state[1],self.state[2]] == self.paddle._Q_table[self.state[0],self.state[1],self.state[2]].max()
-                        ))
-                    next_action = list(self.actions)[index_action]
-                else:
-                    next_action = np.random.choice(list(self.actions))
+                ##if np.random.uniform() <= self.ratio_explotacion:
+                ##    # Tomar el maximo
+                ##    index_action = np.random.choice(np.flatnonzero(
+                ##            self.paddle._Q_table[self.state[0],self.state[1],self.state[2]] == self.paddle._Q_table[self.state[0],self.state[1],self.state[2]].max()
+                ##        ))
+                ##    next_action = list(self.paddle.actions)[index_action]
+                ##else:
+                ##    next_action = np.random.choice(list(self.paddle.actions))
 
                 # Realizar acción y observar el resultado
-                state, reward, done = self.step(next_action)
+                ##state, reward, done = self.step(next_action)
 
                 # Actualizar Q-valor
-                if episode > 1:
-                    self.paddle.update(self, old_state, next_action, reward, state, done)
+                ##if episode > 1:
+                ##    self.paddle.update(self, old_state, next_action, reward, state, done)
                 
 
 
