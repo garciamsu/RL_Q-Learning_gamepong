@@ -7,27 +7,27 @@ class Game:
 
     class Ball:
         def __init__(self):
-            self.ball = turtle.Turtle()
-            self.ball.speed(0)
-            self.ball.shape("circle")
-            self.ball.color("red")
-            self.ball.penup()
-            self.ball.goto(0, 0)
-            self.ball.dx = 0.2
-            self.ball.dy = 0.2
+            self.skip = turtle.Turtle()
+            self.skip.speed(0)
+            self.skip.shape("circle")
+            self.skip.color("red")
+            self.skip.penup()
+            self.skip.goto(0, 0)
+            self.skip.dx = 0.2
+            self.skip.dy = 0.2
 
         def move(self):
-            self.ball.setx(self.ball.xcor() + self.ball.dx)
-            self.ball.sety(self.ball.ycor() + self.ball.dy)
+            self.skip.setx(self.skip.xcor() + self.skip.dx)
+            self.skip.sety(self.skip.ycor() + self.skip.dy)
 
         def bounce_y(self):
-            self.ball.dy *= -1
+            self.skip.dy *= -1
 
         def bounce_x(self):
-            self.ball.dx *= -1
+            self.skip.dx *= -1
 
         def reset_position(self):
-            self.ball.goto(0, 0)
+            self.skip.goto(0, 0)
             self.bounce_y()
 
     class Paddle:
@@ -132,25 +132,25 @@ class Game:
 
     def check_collisions(self):
         # Rebote en el borde superior
-        if self.ball.ball.ycor() > 290:
-            self.ball.ball.sety(290)
+        if self.ball.skip.ycor() > 290:
+            self.ball.skip.sety(290)
             self.ball.bounce_y()
 
         # Rebote en los bordes laterales
-        if self.ball.ball.xcor() > 390 or self.ball.ball.xcor() < -390:
+        if self.ball.skip.xcor() > 390 or self.ball.skip.xcor() < -390:
             self.ball.bounce_x()
 
         # Rebote en la paleta
-        if (self.ball.ball.ycor() > -240 and self.ball.ball.ycor() < -230) and \
-           (self.paddle.paddle.xcor() + 50 > self.ball.ball.xcor() > self.paddle.paddle.xcor() - 50):
-            self.ball.ball.sety(-230)
+        if (self.ball.skip.ycor() > -240 and self.ball.skip.ycor() < -230) and \
+           (self.paddle.paddle.xcor() + 50 > self.ball.skip.xcor() > self.paddle.paddle.xcor() - 50):
+            self.ball.skip.sety(-230)
             self.ball.bounce_y()
             self.score += 10
             self.plays += 1
             self.update_score()
 
         # Revisar si la pelota toca el borde inferior
-        if self.ball.ball.ycor() < -290:
+        if self.ball.skip.ycor() < -290:
             self.ball.reset_position()
             self.score -= 10
             self.plays += 1
@@ -170,11 +170,10 @@ class Game:
             self.paddle.move_right
             
         self.window.update()        
-        self.ball.move()
+        self.ball.skip.move()
         self.check_collisions()
 
-        print(self.ball.ball)
-        self.state = (floor(1.1), floor(self.ball.ball.ycor()), floor(self.ball.ball.xcor()))
+        self.state = (floor(1.1), floor(self.ball.skip.ycor()), floor(self.ball.skip.xcor()))
         done = self.paddle.lives <=0 # final
         reward = self.score
 
@@ -182,6 +181,11 @@ class Game:
 
     def run_game(self):
 
+        while True:
+            self.window.update()
+            self.ball.move()
+            self.check_collisions()
+'''
         for episode in range(self.episodes_max):
             # Inicializar el episodio
             self.reset()
@@ -206,7 +210,7 @@ class Game:
                 ##if episode > 1:
                 ##    self.paddle.update(self, old_state, next_action, reward, state, done)
                 
-
+'''
 
 # Ejecutar el juegox
 if __name__ == "__main__":
