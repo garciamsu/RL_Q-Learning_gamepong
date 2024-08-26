@@ -13,8 +13,8 @@ class Game:
             self.skip.color("red")
             self.skip.penup()
             self.skip.goto(0, 0)
-            self.skip.dx = 0.2
-            self.skip.dy = 0.2
+            self.skip.dx = 2
+            self.skip.dy = 2
 
         def move(self):
             self.skip.setx(self.skip.xcor() + self.skip.dx)
@@ -107,7 +107,7 @@ class Game:
 
         self.reset()
 
-        self.paddle = self.Paddle((0, -250), self)
+        self.agent = self.Paddle((0, -250), self)
         self.ball = self.Ball()
 
         self.pen = turtle.Turtle()
@@ -121,16 +121,23 @@ class Game:
         self.window.listen()
 
         if ai == False:
-            self.window.onkeypress(self.paddle.move_left, "Left")
-            self.window.onkeypress(self.paddle.move_right, "Right")
+            self.window.onkeypress(self.agent.move_left, "Left")
+            self.window.onkeypress(self.agent.move_right, "Right")
 
         self.run_game()
 
     def update_score(self):
         self.pen.clear()
-        self.pen.write(f"Puntaje: {self.score}, Vidas: {self.paddle.lives} / {self.paddle.lives_max}, Jugadas: {self.plays}", align="center", font=("Courier", 24, "normal"))
+        #self.pen.write(f"Puntaje: {self.score}, Vidas: {self.paddle.lives} / {self.paddle.lives_max}, Jugadas: {self.plays}", align="center", font=("Courier", 24, "normal"))
+
+    def update_position(self):
+        self.pen.clear()
+        self.pen.write(f"Paddle: {floor(self.agent.paddle.xcor())}, x: {floor(self.ball.skip.xcor())}, y: {floor(self.ball.skip.ycor())}", align="center", font=("Courier", 18, "normal"))
 
     def check_collisions(self):
+
+        self.update_position()
+
         # Rebote en el borde superior
         if self.ball.skip.ycor() > 290:
             self.ball.skip.sety(290)
@@ -169,11 +176,12 @@ class Game:
         elif action == "right":
             self.paddle.move_right
             
-        self.window.update()        
+        self.window.update()      
+        self.update_position()
         self.ball.skip.move()
         self.check_collisions()
 
-        self.state = (floor(1.1), floor(self.ball.skip.ycor()), floor(self.ball.skip.xcor()))
+        self.state = (floor(self.paddle.xcor()), floor(self.ball.skip.xcor()), floor(self.ball.skip.ycor()))
         done = self.paddle.lives <=0 # final
         reward = self.score
 
@@ -184,7 +192,9 @@ class Game:
         while True:
             self.window.update()
             self.ball.move()
+            #self.ball.reset_position()
             self.check_collisions()
+            
 '''
         for episode in range(self.episodes_max):
             # Inicializar el episodio
