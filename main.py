@@ -61,13 +61,13 @@ class Game:
                 self._Q_table = np.zeros(position)
 
         def move_left(self):
-            x = self.xcor()
+            x = self.paddle.xcor()
             if x > -350:
                 x -= self.movement
             self.paddle.setx(x)
 
         def move_right(self):
-            x = self.xcor()
+            x = self.paddle.xcor()
             if x < 350:
                 x += self.movement
             self.paddle.setx(x)
