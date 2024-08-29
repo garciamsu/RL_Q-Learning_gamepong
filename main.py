@@ -149,7 +149,7 @@ class Game:
 
         # Rebote en la paleta
         if (self.ball.skip.ycor() > -240 and self.ball.skip.ycor() < -230) and \
-           (self.paddle.paddle.xcor() + 50 > self.ball.skip.xcor() > self.paddle.paddle.xcor() - 50):
+           (self.agent.paddle.xcor() + 50 > self.ball.skip.xcor() > self.agent.paddle.xcor() - 50):
             self.ball.skip.sety(-230)
             self.ball.bounce_y()
             self.score += 10
