@@ -168,6 +168,8 @@ class Game:
         self.state = [0,0,0]
         self.score = 0
         self.plays = 0
+        self.total_reward = 0
+        
     
     def step(self, action):
 
@@ -188,30 +190,40 @@ class Game:
         return self.state, reward , done
 
     def run_game(self):
+        
+        # Estadistica de las juegadas
+        max_points= -9999
+        first_max_reached = 0
+        total_rw=0
+        steps=[]        
 
-        while True:
-            self.window.update()
-            self.ball.move()
-            #self.ball.reset_position()
-            self.check_collisions()
-            
-'''
+
+        #while True:
+        #    self.window.update()
+        #    self.ball.move()
+        #    self.check_collisions()
+         
+
         for episode in range(self.episodes_max):
             # Inicializar el episodio
             self.reset()
+            reward = None
     
-            while self.score >= 0 and self.paddle.lives > 0:
+            while self.score >= 0 and self.plays < 3000 and self.paddle.lives > 0 and self.total_reward <= 1000:
+
+                # Elegir acción usando la política epsilon-greedy            
+                if np.random.uniform() <= self.ratio_explotacion:
+                    # Tomar el maximo
+                    index_action = np.random.choice(np.flatnonzero(
+                            self.paddle._Q_table[self.state[0],self.state[1],self.state[2]] == self.paddle._Q_table[self.state[0],self.state[1],self.state[2]].max()
+                        ))
+                    next_action = list(self.paddle.actions)[index_action]
+                else:
+                    next_action = np.random.choice(list(self.paddle.actions))
+
 
                 old_state = np.array(self.state)
-                # Elegir acción usando la política epsilon-greedy            
-                ##if np.random.uniform() <= self.ratio_explotacion:
-                ##    # Tomar el maximo
-                ##    index_action = np.random.choice(np.flatnonzero(
-                ##            self.paddle._Q_table[self.state[0],self.state[1],self.state[2]] == self.paddle._Q_table[self.state[0],self.state[1],self.state[2]].max()
-                ##        ))
-                ##    next_action = list(self.paddle.actions)[index_action]
-                ##else:
-                ##    next_action = np.random.choice(list(self.paddle.actions))
+
 
                 # Realizar acción y observar el resultado
                 ##state, reward, done = self.step(next_action)
@@ -219,8 +231,7 @@ class Game:
                 # Actualizar Q-valor
                 ##if episode > 1:
                 ##    self.paddle.update(self, old_state, next_action, reward, state, done)
-                
-'''
+
 
 # Ejecutar el juegox
 if __name__ == "__main__":
