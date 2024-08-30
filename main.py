@@ -46,12 +46,12 @@ class Game:
             self.lives = game.lives_max
             self.lives_max = game.lives_max
             self.movement = game.movement
-            self.actions = ['lelf','right']
+            self.actions = ['Left','Right']
             
             # Inicializa las variables y parametros de algoritmo Q-learning
             self.discount_factor = game.discount_factor
             self.learning_rate = game.learning_rate
-            self.ratio_explotacion = game.ratio_explotacion
+            self.ratio_exploration = game.ratio_exploration
 
         def move_left(self):
             x = self.paddle.xcor()
@@ -79,7 +79,7 @@ class Game:
             self._q_table[old_state[0], old_state[1], old_state[2], idx_action_taken] = actual_q_value + \
                                                 self.learning_rate*(future_max_q_value -actual_q_value)
 
-    def __init__(self, episodes_max, lives_max, width, height, movement, discount_factor, learning_rate, ratio_explotacion, ai=False):
+    def __init__(self, episodes_max, lives_max, width, height, movement, discount_factor, learning_rate, ratio_exploration, ai=False):
 
         self.window = turtle.Screen()
         self.window.title("Ping Pong para un Jugador")
@@ -96,7 +96,7 @@ class Game:
         self.lives_max = lives_max
         self.discount_factor = discount_factor
         self.learning_rate = learning_rate
-        self.ratio_explotacion = ratio_explotacion
+        self.ratio_exploration = ratio_exploration
 
         self.agent = self.Paddle((0, -250), self)
         self.ball = self.Ball()
@@ -200,8 +200,21 @@ class Game:
     
             # Bucle de restricciones
             while self.score >= 0 and self.plays < 3000 and self.agent.lives > 0 and self.total_reward <= 1000:
-                # Obtiene el estado actual
+                # Observa el estado actual
                 current_state = np.array(self.state)
+
+                # Toma una accion basada en la política epsilon-greedy            
+                if np.random.uniform() >= self.ratio_exploration:
+                    next_action = np.random.choice(list(self.agent.actions))
+                else:
+                    # Tomar el maximo
+                    index_action = np.random.choice(np.flatnonzero(
+                            self.agent._q_table[self.state[0],self.state[1],self.state[2]] == self.agent._q_table[self.state[0],self.state[1],self.state[2]].max()
+                        ))
+                    next_action = list(self.agent.actions)[index_action]
+            
+                print(next_action)
+                break
 
 
         #while True:
@@ -214,4 +227,4 @@ class Game:
 
 # Ejecutar el juegox
 if __name__ == "__main__":
-    Game(ai=False, episodes_max=10, lives_max=3, width=800, height=600, movement=30, discount_factor = 0.1, learning_rate = 0.1, ratio_explotacion = 0.9)
+    Game(ai=False, episodes_max=10, lives_max=3, width=800, height=600, movement=30, discount_factor = 0.1, learning_rate = 0.1, ratio_exploration = 0.9)
