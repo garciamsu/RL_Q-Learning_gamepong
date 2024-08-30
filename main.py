@@ -65,7 +65,8 @@ class Game:
                 x += self.movement
             self.paddle.setx(x)
         
-        def update(self, game, old_state, action_taken, reward_action_taken, new_state, reached_end):
+        #def update_Qtable(self, game, old_state, action_taken, reward_action_taken, new_state, reached_end):
+        def update_Qtable(self, game, old_state, action_taken, reward_action_taken, new_state, reached_end):
             idx_action_taken =list(game.action_space).index(action_taken)
 
             actual_q_value_options = self._q_table[old_state[0], old_state[1], old_state[2]]
@@ -97,6 +98,11 @@ class Game:
         self.discount_factor = discount_factor
         self.learning_rate = learning_rate
         self.ratio_exploration = ratio_exploration
+        
+        self.state = [0,0,0]
+        self.score = 0
+        self.plays = 0
+        self.total_reward = 0
 
         self.agent = self.Paddle((0, -250), self)
         self.ball = self.Ball()
@@ -120,7 +126,7 @@ class Game:
 
     def show_score(self):
         self.pen.clear()
-        self.pen.write(f"Puntaje: {self.score}, Vidas: {self.paddle.lives} / {self.paddle.lives_max}, Jugadas: {self.plays}", align="center", font=("Courier", 24, "normal"))
+        self.pen.write(f"Puntaje: {self.score}, Vidas: {self.agent.lives} / {self.agent.lives_max}, Jugadas: {self.plays}", align="center", font=("Courier", 24, "normal"))
         #self.show_position()
 
     def show_position(self):
@@ -218,8 +224,7 @@ class Game:
                 self.check_collisions()
                 
                 # Actualizar la tabla Q
-                self.agent.update()
-                
+                # self.agent.update_Qtable()
                 
                 break
 
