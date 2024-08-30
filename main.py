@@ -107,7 +107,7 @@ class Game:
         self.pen.penup()
         self.pen.hideturtle()
         self.pen.goto(0, 260)
-        self.update_score()
+        self.show_score()
 
         self.reset()
         self.window.listen()
@@ -118,17 +118,18 @@ class Game:
 
         self.run_game()
 
-    def update_score(self):
+    def show_score(self):
         self.pen.clear()
-        #self.pen.write(f"Puntaje: {self.score}, Vidas: {self.paddle.lives} / {self.paddle.lives_max}, Jugadas: {self.plays}", align="center", font=("Courier", 24, "normal"))
+        self.pen.write(f"Puntaje: {self.score}, Vidas: {self.paddle.lives} / {self.paddle.lives_max}, Jugadas: {self.plays}", align="center", font=("Courier", 24, "normal"))
+        #self.show_position()
 
-    def update_position(self):
+    def show_position(self):
         self.pen.clear()
         self.pen.write(f"Paddle: {floor(self.agent.paddle.xcor())}, x: {floor(self.ball.skip.xcor())}, y: {floor(self.ball.skip.ycor())}", align="center", font=("Courier", 18, "normal"))
 
     def check_collisions(self):
 
-        self.update_position()
+        self.show_position()
 
         # Rebote en el borde superior
         if self.ball.skip.ycor() > 290:
@@ -146,15 +147,18 @@ class Game:
             self.ball.bounce_y()
             self.score += 10
             self.plays += 1
-            self.update_score()
+            self.show_score()
 
         # Revisar si la pelota toca el borde inferior
         if self.ball.skip.ycor() < -290:
             self.ball.reset_position()
             self.score -= 10
             self.plays += 1
-            self.paddle.lives -= 1
-            self.update_score()
+            self.agent.lives -= 1
+            self.show_score()
+        
+        # Actualiza el estado    
+        self.state = (floor(self.agent.paddle.xcor()), floor(self.ball.skip.xcor()), floor(self.ball.skip.ycor()))
 
     def reset(self):
         self.state = [0,0,0]
@@ -162,23 +166,17 @@ class Game:
         self.plays = 0
         self.total_reward = 0
     
-    def step(self, action):
+    def take_action(self, action):
 
-        if action == "left":
-            self.paddle.move_left
-        elif action == "right":
-            self.paddle.move_right
+        if action == "Left":
+            self.agent.move_left
+        elif action == "Right":
+            self.agent.move_right
+        
+        self.ball.move()
             
         self.window.update()      
-        self.update_position()
-        self.ball.skip.move()
-        self.check_collisions()
-
-        self.state = (floor(self.paddle.xcor()), floor(self.ball.skip.xcor()), floor(self.ball.skip.ycor()))
-        done = self.paddle.lives <=0 # final
-        reward = self.score
-
-        return self.state, reward , done
+        self.show_score()
 
     def run_game(self):
         
@@ -186,7 +184,7 @@ class Game:
         max_points= -9999
         first_max_reached = 0
         total_rw=0
-        steps=[]
+        take_action = []
 
         # Inicializar tabla de Q
         position = list(self.state_space.shape)
@@ -203,7 +201,7 @@ class Game:
                 # Observa el estado actual
                 current_state = np.array(self.state)
 
-                # Toma una accion basada en la política epsilon-greedy            
+                # Selecciona una accion basada en la política epsilon-greedy            
                 if np.random.uniform() >= self.ratio_exploration:
                     next_action = np.random.choice(list(self.agent.actions))
                 else:
@@ -213,17 +211,17 @@ class Game:
                         ))
                     next_action = list(self.agent.actions)[index_action]
             
-                print(next_action)
+                # Toma una accion 
+                self.take_action(next_action)
+                
+                # Medir la recompensa
+                self.check_collisions()
+                
+                # Actualizar la tabla Q
+                self.agent.update()
+                
+                
                 break
-
-
-        #while True:
-        #    self.window.update()
-        #    self.ball.move()
-        #    self.check_collisions()
-         
-        
-
 
 # Ejecutar el juegox
 if __name__ == "__main__":
