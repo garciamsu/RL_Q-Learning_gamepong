@@ -31,7 +31,7 @@ class Game:
             self.bounce_y()
 
     class Paddle:
-        def __init__(self, position, game, policy=None):
+        def __init__(self, position, game):
 
             # Inicializa el entorno grafico
             self.paddle = turtle.Turtle()
@@ -52,13 +52,6 @@ class Game:
             self.discount_factor = game.discount_factor
             self.learning_rate = game.learning_rate
             self.ratio_explotacion = game.ratio_explotacion
-
-            if policy is not None:
-                self._Q_table = policy
-            else:
-                position = list(game.state_space.shape)
-                position.append(len(self.actions))
-                self._Q_table = np.zeros(position)
 
         def move_left(self):
             x = self.paddle.xcor()
@@ -105,8 +98,6 @@ class Game:
         self.learning_rate = learning_rate
         self.ratio_explotacion = ratio_explotacion
 
-        self.reset()
-
         self.agent = self.Paddle((0, -250), self)
         self.ball = self.Ball()
 
@@ -118,6 +109,7 @@ class Game:
         self.pen.goto(0, 260)
         self.update_score()
 
+        self.reset()
         self.window.listen()
 
         if ai == False:
@@ -169,7 +161,6 @@ class Game:
         self.score = 0
         self.plays = 0
         self.total_reward = 0
-        
     
     def step(self, action):
 
@@ -191,11 +182,26 @@ class Game:
 
     def run_game(self):
         
-        # Estadistica de las juegadas
+        # Inicializacion de las estadistica de las jugadas
         max_points= -9999
         first_max_reached = 0
         total_rw=0
-        steps=[]        
+        steps=[]
+
+        # Inicializar tabla de Q
+        position = list(self.state_space.shape)
+        position.append(len(self.agent.actions))
+        self.agent._q_table = np.zeros(position)
+
+        # Bucle de episodios
+        for episode in range(self.episodes_max):
+            # Inicializar el episodio
+            self.reset()
+    
+            # Bucle de restricciones
+            while self.score >= 0 and self.plays < 3000 and self.agent.lives > 0 and self.total_reward <= 1000:
+                # Obtiene el estado actual
+                current_state = np.array(self.state)
 
 
         #while True:
@@ -203,34 +209,7 @@ class Game:
         #    self.ball.move()
         #    self.check_collisions()
          
-
-        for episode in range(self.episodes_max):
-            # Inicializar el episodio
-            self.reset()
-            reward = None
-    
-            while self.score >= 0 and self.plays < 3000 and self.paddle.lives > 0 and self.total_reward <= 1000:
-
-                # Elegir acción usando la política epsilon-greedy            
-                if np.random.uniform() <= self.ratio_explotacion:
-                    # Tomar el maximo
-                    index_action = np.random.choice(np.flatnonzero(
-                            self.paddle._Q_table[self.state[0],self.state[1],self.state[2]] == self.paddle._Q_table[self.state[0],self.state[1],self.state[2]].max()
-                        ))
-                    next_action = list(self.paddle.actions)[index_action]
-                else:
-                    next_action = np.random.choice(list(self.paddle.actions))
-
-
-                old_state = np.array(self.state)
-
-
-                # Realizar acción y observar el resultado
-                ##state, reward, done = self.step(next_action)
-
-                # Actualizar Q-valor
-                ##if episode > 1:
-                ##    self.paddle.update(self, old_state, next_action, reward, state, done)
+        
 
 
 # Ejecutar el juegox
