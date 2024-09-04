@@ -66,20 +66,36 @@ class Game:
             self.paddle.setx(x)
         
         #def update_Qtable(self, game, old_state, action_taken, reward_action_taken, new_state, reached_end):
-        def update_Qtable(self, game, old_state, action_taken, reward_action_taken, new_state, reached_end):
-            idx_action_taken =list(game.action_space).index(action_taken)
-
+        def update_Qtable(self, action_taken, old_state, new_state, reward_action_taken):
+            idx_action_taken =list(self.actions).index(action_taken)
+            
             actual_q_value_options = self._q_table[old_state[0], old_state[1], old_state[2]]
             actual_q_value = actual_q_value_options[idx_action_taken]
 
-            future_q_value_options = self._q_table[new_state[0], new_state[1], new_state[2]]
-            future_max_q_value = reward_action_taken  +  self.discount_factor*future_q_value_options.max()
+            print("***********")
+            try:
+                future_q_value_options = self._q_table[new_state[0], new_state[1], new_state[2]]
+                future_max_q_value = reward_action_taken  +  self.discount_factor*future_q_value_options.max()
+            except Exception as e:
+                print("error")
+
+            #temp1 = np.array(new_state)
+            #print(new_state)
+            #print(type(new_state))
+            #print(type(temp1))
+            #print(temp1)
+            print(new_state)
+            print(future_q_value_options)
+            print(future_max_q_value)
+            
+            """
             if reached_end:
                 future_max_q_value = reward_action_taken #maximum reward
 
             self._q_table[old_state[0], old_state[1], old_state[2], idx_action_taken] = actual_q_value + \
                                                 self.learning_rate*(future_max_q_value -actual_q_value)
-
+            """
+    
     def __init__(self, episodes_max, lives_max, width, height, movement, discount_factor, learning_rate, ratio_exploration, ai=False):
 
         self.window = turtle.Screen()
@@ -205,7 +221,7 @@ class Game:
             # Bucle de restricciones
             while self.score >= 0 and self.plays < 3000 and self.agent.lives > 0 and self.total_reward <= 1000:
                 # Observa el estado actual
-                current_state = np.array(self.state)
+                old_state = np.array(self.state)
 
                 # Selecciona una accion basada en la política epsilon-greedy            
                 if np.random.uniform() >= self.ratio_exploration:
@@ -224,7 +240,7 @@ class Game:
                 self.check_collisions()
                 
                 # Actualizar la tabla Q
-                # self.agent.update_Qtable()
+                self.agent.update_Qtable(next_action, old_state, self.state, self.score)
                 
                 break
 
