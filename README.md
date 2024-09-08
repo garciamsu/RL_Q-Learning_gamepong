@@ -103,9 +103,14 @@ Dado que la naturaleza del juego de ping pong que has descrito es **determiníst
 
 Para un entorno con las características descritas, **Q-Learning** y **SARSA** son probablemente los algoritmos más recomendados debido a su capacidad para manejar entornos discretos, determinísticos y totalmente observables. **Dynamic Programming** es también una opción sólida si el modelo del entorno es conocido. Si estás trabajando con simulaciones o si el entorno es sencillo, los **métodos de Monte Carlo** pueden ser útiles. **Dyna-Q** es ideal si buscas una combinación de aprendizaje basado en experiencia directa y simulaciones.
 ### Implementar Q-Learning en un Juego de Ping Pong
+
+![](files/assets/Algoritmo.png)
+
 #### Paso 1: Definir el Entorno y los Estados
 Primero, necesitamos definir el entorno en el que el agente (nuestro jugador) operará. En Q-Learning, el entorno se representa en términos de **estados**.
+
 **Estados**: Un estado es una representación del entorno en un momento dado. En el juego de ping pong, un estado podría estar compuesto por:
+
 1. Caso 1
    1. La posición vertical/horizontal de la pala del jugador.
    1. La posición vertical y horizontal de la pelota.
@@ -156,10 +161,8 @@ Finalmente, entrenamos al agente durante varios episodios y evaluamos su rendimi
 
 Q-Learning es un proceso iterativo donde el agente mejora su política de acción con el tiempo mediante la actualización continua de la tabla Q. En el juego de ping pong, el agente aprenderá a mover la pala de manera efectiva para maximizar su puntaje y minimizar la pérdida de vidas, mejorando su rendimiento en cada episodio de juego. **En resumen,** el ping pong es un excelente ejemplo para entender cómo funciona el aprendizaje por refuerzo. Al descomponer el juego en sus componentes básicos, podemos apreciar cómo los agentes aprenden a tomar decisiones óptimas a través de la interacción con su entorno y la obtención de recompensas.
 
-
 ## Herramientas utiles
 - Convertir WORD a Markdown Online [Aspose](https://products.aspose.app/words/conversion/word-to-md)
-- 
 
 ## Bibliografía
 
