@@ -163,7 +163,7 @@ Q-Learning es un proceso iterativo donde el agente mejora su política de acció
 
 ## Bibliografía
 
-[1] Y. -C. Choi and H. -S. Ahn, "A survey on multi-agent reinforcement learning: Coordination problems," *Proceedings of 2010 IEEE/ASME International Conference on Mechatronic and Embedded Systems and Applications*, QingDao, China, 2010, pp. 81-86
-[2] Rana, A.S., Iqbal, F., Siddiqui, A.S. and Thomas, M.S. (2019), Hybrid methodology to analyse reliability and techno-economic evaluation of microgrid configurations. IET Gener. Transm. Distrib., 13: 4778-4787.
-[3] Sutton, Richard S., and Andrew G. Barto. *Reinforcement Learning: An Introduction*. MIT Press, 2018. 
-[4] Ris-Ala, R. (2023). *Fundamentals of Reinforcement Learning*. Springer Nature Switzerland.
+- [1] Y. -C. Choi and H. -S. Ahn, "A survey on multi-agent reinforcement learning: Coordination problems," *Proceedings of 2010 IEEE/ASME International Conference on Mechatronic and Embedded Systems and Applications*, QingDao, China, 2010, pp. 81-86
+- [2] Rana, A.S., Iqbal, F., Siddiqui, A.S. and Thomas, M.S. (2019), Hybrid methodology to analyse reliability and techno-economic evaluation of microgrid configurations. IET Gener. Transm. Distrib., 13: 4778-4787.
+- [3] Sutton, Richard S., and Andrew G. Barto. *Reinforcement Learning: An Introduction*. MIT Press, 2018. 
+- [4] Ris-Ala, R. (2023). *Fundamentals of Reinforcement Learning*. Springer Nature Switzerland.
