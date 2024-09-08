@@ -85,6 +85,46 @@
         <mxCell id="1M5YjZfz-k9XdCTFdonw-20" value="The model is a representation of the environment that allows the agent to predict how the state will change when performing an action. In ping pong, a model might predict the trajectory of the ball after it is hit by the paddle." style="text;whiteSpace=wrap;" parent="1" vertex="1">
           <mxGeometry x="290" y="420" width="270" height="70" as="geometry" />
         </mxCell>
+        <mxCell id="xHkzRlYoBP66rdY3Ei-1-1" value="A" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="58" y="520" width="26" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="xHkzRlYoBP66rdY3Ei-1-2" value="B" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="20" y="602" width="26" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="xHkzRlYoBP66rdY3Ei-1-3" value="C" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="96" y="602" width="27" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="xHkzRlYoBP66rdY3Ei-1-4" value="D" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="58" y="684" width="27" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="xHkzRlYoBP66rdY3Ei-1-5" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.94;entryX=0.49;entryY=0;rounded=0;" edge="1" parent="1" source="xHkzRlYoBP66rdY3Ei-1-1" target="xHkzRlYoBP66rdY3Ei-1-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="33" y="577" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xHkzRlYoBP66rdY3Ei-1-6" value="" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.94;entryX=0.48;entryY=0;rounded=0;" edge="1" parent="1" source="xHkzRlYoBP66rdY3Ei-1-1" target="xHkzRlYoBP66rdY3Ei-1-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="109" y="577" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xHkzRlYoBP66rdY3Ei-1-7" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.49;exitY=1;entryX=-0.01;entryY=0.05;rounded=0;" edge="1" parent="1" source="xHkzRlYoBP66rdY3Ei-1-2" target="xHkzRlYoBP66rdY3Ei-1-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="33" y="659" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xHkzRlYoBP66rdY3Ei-1-8" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.48;exitY=1;entryX=0.97;entryY=0.05;rounded=0;" edge="1" parent="1" source="xHkzRlYoBP66rdY3Ei-1-3" target="xHkzRlYoBP66rdY3Ei-1-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="109" y="659" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
