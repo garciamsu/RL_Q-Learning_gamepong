@@ -138,7 +138,7 @@ Ahora, implementamos el núcleo del algoritmo Q-Learning.
 **Algoritmo Q-Learning**:
 1. **Exploración vs. Explotación**: Define un parámetro ε (epsilon) para decidir si el agente explora acciones nuevas o explota la mejor acción conocida hasta el momento. Con probabilidad ε, el agente elegirá una acción al azar (exploración); de lo contrario, elegirá la acción con el mayor valor Q en ese estado (explotación).
 1. **Actualización de la Tabla Q**: Después de que el agente tome una acción y observe la recompensa y el nuevo estado resultante, actualizamos la tabla Q usando la fórmula:
-   ![](Aspose.Words.4016bc56-786a-4dd4-8df8-0de9cfbe8fd3.003.png)
+   ![](files/assets/Algoritmo de Q-learning.png)
    Donde:
    1. Q(s,a) es el valor Q para el estado actual s y la acción a.
    1. α es la tasa de aprendizaje (learning rate).
