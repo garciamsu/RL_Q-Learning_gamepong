@@ -158,7 +158,7 @@ Q-Learning es un proceso iterativo donde el agente mejora su política de acció
 
 
 ## Herramientas utiles
-- Convertir WORD a Markdown Online ![Aspose](https://products.aspose.app/words/conversion/word-to-md)
+- Convertir WORD a Markdown Online [Aspose](https://products.aspose.app/words/conversion/word-to-md)
 - 
 
 ## Bibliografía
