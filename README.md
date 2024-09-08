@@ -34,7 +34,7 @@ La selección de algoritmos de RL depende de varias condiciones y característic
 - **Multiagente:** En entornos donde múltiples agentes interactúan, se requieren algoritmos que manejan la cooperación y competencia entre agentes, como los basados en aprendizaje multiagente.
 
 Seleccionar el algoritmo adecuado implica evaluar estas condiciones y elegir el que mejor se adapte a las características específicas del problema y las restricciones del entorno.
-# Casos de estudio
+# Caso de estudio
 ## Juego de Ping Pong
 ### Descripción del juego
 
@@ -108,33 +108,32 @@ Para un entorno con las características descritas, **Q-Learning** y **SARSA** s
 ![](files/assets/Algoritmo.png)
 
 #### Paso 1: Definir el Entorno y los Estados
-Primero, necesitamos definir el entorno en el que el agente (nuestro jugador) operará. En Q-Learning, el entorno se representa en términos de **estados**.
+Primero, necesitamos definir el entorno en el que el agente (nuestro jugador) operará. En Q-Learning, el entorno se representa en términos de **estados**. Un estado es una representación del entorno en un momento dado. En el juego de ping pong, un estado podría estar compuesto por:
 
-**Estados**: Un estado es una representación del entorno en un momento dado. En el juego de ping pong, un estado podría estar compuesto por:
-
-1. Caso 1
+- Caso 1 (Por defecto)
    1. La posición vertical/horizontal de la pala del jugador.
    1. La posición vertical y horizontal de la pelota.
-1. Caso 2
+- Caso 2
    1. La posición vertical/horizontal de la pala del jugador.
    1. La posición vertical de la pelota.
    1. La dirección del movimiento de la pelota (arriba o abajo).
 #### Paso 2: Definir las Acciones
-Las **acciones** son los movimientos que el agente puede realizar en cada estado.
-**Acciones**: En este caso, las acciones disponibles para el agente podrían ser:
-1. Caso 1
-   1. Mover la pala hacia arriba.
-   1. Mover la pala hacia abajo.
+Las **acciones** son los movimientos que el agente puede realizar en cada estado. En este caso, las acciones disponibles para el agente podrían ser:
+- Caso 1 (Por defecto)
+   1. Mover la pala hacia arriba / derecha.
+   1. Mover la pala hacia abajo / izquierda.
+- Caso 2
+   1. Mover la pala hacia arriba / derecha.
+   1. Mover la pala hacia abajo / izquierda.
    1. Mantener la pala en la misma posición.
-1. Caso 2
-   1. Mover la pala hacia arriba.
-   1. Mover la pala hacia abajo.
+
 #### Paso 3: Inicializar la Tabla Q
 La tabla Q es una estructura que almacena los valores Q para cada par estado-acción. Estos valores representan la "calidad" de tomar una acción en un estado particular en términos de la recompensa esperada a largo plazo.
 
 **Tabla Q**: Inicializa la tabla Q con valores pequeños (por ejemplo, todos ceros). La tabla Q tendrá filas para cada estado posible y columnas para cada acción posible.
 #### Paso 4: Definir la Función de Recompensa
 La **función de recompensa** es lo que el agente intenta maximizar. El objetivo del agente es maximizar la suma de estas recompensas a lo largo del juego. Necesitamos definir las recompensas para diferentes resultados.
+
 **Recompensas**:
 1. Si el jugador devuelve la pelota con éxito (la pelota rebota en la pala), se le otorga una recompensa positiva (por ejemplo, +10 puntos).
 1. Si el jugador falla y la pelota pasa de largo, se le otorga una recompensa negativa (por ejemplo, -10 puntos).
