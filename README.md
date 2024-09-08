@@ -54,7 +54,7 @@ El juego de ping pong para un solo jugador, puede ser una excelente representaci
 
 En un contexto de aprendizaje por refuerzo, un agente (en este caso, el jugador) aprendería a jugar al ping pong optimizando una política que maximiza las recompensas acumuladas (por ejemplo, mantener la pelota en juego durante el mayor tiempo posible) al tomar acciones (mover la pala) basadas en la función de valor que evalúa la probabilidad de éxito futuro desde un estado dado. El modelo puede estar implícito en el entorno, prediciendo cómo la pelota reacciona a las acciones del jugador. Este marco de RL podría aplicarse para desarrollar un agente autónomo capaz de jugar al ping pong aprendiendo a través de la experiencia, sin necesidad de reglas predefinidas.
 
-![](files/assets/componentes.png =100%)
+![](files/assets/componentes.png =300x)
 
 ### Naturaleza del juego de ping pong
 En el contexto del aprendizaje por refuerzo, la **naturaleza del entorno** en el juego de ping pong puede describirse en términos de los siguientes aspectos:
