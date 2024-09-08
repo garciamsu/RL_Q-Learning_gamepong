@@ -1,17 +1,3 @@
-<!DOCTYPE html>
-<!-- KaTeX requires the use of the HTML5 doctype. Without it, KaTeX may not render properly -->
-<html>
-  <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
-
-    <!-- The loading of KaTeX is deferred to speed up page rendering -->
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script>
-
-    <!-- To automatically render math in text elements, include the auto-render extension: -->
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous"
-        onload="renderMathInElement(document.body);"></script>
-  </head>
-
 # Fundamentos del Aprendizaje por Refuerzo
 
 El término "Aprendizaje automático por refuerzo", o simplemente "Aprendizaje por refuerzo" (RL, por sus siglas en inglés), se basa en la idea de que un agente aprende a tomar decisiones en un entorno dinámico a través de la adquisición de conocimiento para maximizar la señal de recompensa. Antes de entrar en los detalles, es importante considerar definiciones de los elementos clave del RL [4]:
@@ -167,10 +153,6 @@ Ahora, implementamos el núcleo del algoritmo Q-Learning.
    1. γ es el factor de descuento, que determina la importancia de las recompensas futuras.
    1. ![](Aspose.Words.4016bc56-786a-4dd4-8df8-0de9cfbe8fd3.004.png)es el valor Q máximo para el siguiente estado s′ y todas las acciones posibles a′.
 
-katex.render("c = \\pm\\sqrt{a^2 + b^2}", element, {
-    throwOnError: false
-});
-
 #### Paso 6: Entrenamiento y Evaluación
 Finalmente, entrenamos al agente durante varios episodios y evaluamos su rendimiento.
 
@@ -188,5 +170,3 @@ Q-Learning es un proceso iterativo donde el agente mejora su política de acció
 - [2] Rana, A.S., Iqbal, F., Siddiqui, A.S. and Thomas, M.S. (2019), Hybrid methodology to analyse reliability and techno-economic evaluation of microgrid configurations. IET Gener. Transm. Distrib., 13: 4778-4787.
 - [3] Sutton, Richard S., and Andrew G. Barto. *Reinforcement Learning: An Introduction*. MIT Press, 2018. 
 - [4] Ris-Ala, R. (2023). *Fundamentals of Reinforcement Learning*. Springer Nature Switzerland.
-
-</html>
