@@ -72,28 +72,16 @@ class Game:
             actual_q_value_options = self._q_table[old_state[0], old_state[1], old_state[2]]
             actual_q_value = actual_q_value_options[idx_action_taken]
 
-            #future_q_value_options = self._q_table[new_state[0], new_state[1], new_state[2]]
-            #future_max_q_value = reward_action_taken  +  self.discount_factor*future_q_value_options.max()
+            future_q_value_options = self._q_table[new_state[0], new_state[1], new_state[2]]
+            future_max_q_value = reward_action_taken  +  self.discount_factor*future_q_value_options.max()
+           
 
-            print("***********")
-            #print(actual_q_value)
-            #temp1 = np.array(new_state)
-            #print(new_state)
-            #print(type(new_state))
-            #print(type(temp1))
-            #print(temp1)
-            print("old_state" + str(old_state))
-            print("new_state" + str(new_state))
-            #print(future_q_value_options)
-            #print(future_max_q_value)
-            
-            """
-            if reached_end:
-                future_max_q_value = reward_action_taken #maximum reward
+            #if reached_end:
+            #    future_max_q_value = reward_action_taken #maximum reward
 
             self._q_table[old_state[0], old_state[1], old_state[2], idx_action_taken] = actual_q_value + \
                                                 self.learning_rate*(future_max_q_value -actual_q_value)
-            """
+
     
     def __init__(self, episodes_max, lives_max, width, height, movement, discount_factor, learning_rate, ratio_exploration, ai=False):
 
@@ -148,18 +136,18 @@ class Game:
 
     def show_score(self):
         self.pen.clear()
-        #self.pen.write(f"Puntaje: {self.score}, Vidas: {self.agent.lives} / {self.agent.lives_max}, Jugadas: {self.plays}", align="center", font=("Courier", 24, "normal"))
+        self.pen.write(f"Puntaje: {self.score}, Vidas: {self.agent.lives} / {self.agent.lives_max}, Jugadas: {self.plays}", align="center", font=("Courier", 24, "normal"))
         #self.show_position()
 
     def show_position(self):
         self.pen.clear()
-        self.pen.write(f"Paddle: {floor(self.agent.paddle.xcor())}, x: {floor(self.ball.skip.xcor())}, y: {floor(self.ball.skip.ycor())}", align="center", font=("Courier", 18, "normal"))
+        #self.pen.write(f"Paddle: {floor(self.agent.paddle.xcor())}, x: {floor(self.ball.skip.xcor())}, y: {floor(self.ball.skip.ycor())}", align="center", font=("Courier", 18, "normal"))
         #self.pen.write(f"Paddle: {self.state[0]}, x: {self.state[1]}, y: {self.state[2]}", align="center", font=("Courier", 18, "normal"))
         #time.sleep(0.4)
 
     def check_collisions(self):
 
-        self.show_position()
+        self.show_score()
 
         # Rebote en el borde superior
         if self.ball.skip.ycor() >= 280:
@@ -241,7 +229,7 @@ class Game:
                            self.agent._q_table[self.state[0],self.state[1],self.state[2]] == self.agent._q_table[self.state[0],self.state[1],self.state[2]].max()
                         ))
                     next_action = list(self.agent.actions)[index_action]
-                #print(np.flatnonzero(self.agent._q_table.shape))
+
                 # Toma una accion 
                 self.take_action(next_action)
                 
@@ -249,10 +237,9 @@ class Game:
                 self.check_collisions()
                 
                 # Actualizar la tabla Q
-                #self.agent.update_Qtable(next_action, old_state, self.state, self.score)
+                self.agent.update_Qtable(next_action, old_state, self.state, self.score)
                 
-                #break
 
 # Ejecutar el juegox
 if __name__ == "__main__":
-    Game(ai=False, episodes_max=5000, lives_max=3, width=800, height=600, movement=10, discount_factor = 0.1, learning_rate = 0.1, ratio_exploration = 0.9)
+    Game(ai=True, episodes_max=5000, lives_max=3, width=800, height=600, movement=10, discount_factor = 0.1, learning_rate = 0.1, ratio_exploration = 0.9)
