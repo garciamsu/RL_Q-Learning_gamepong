@@ -1,20 +1,20 @@
 from math import ceil, floor
 import turtle
-
+import time
 import numpy as np
 
 class Game:
 
     class Ball:
-        def __init__(self):
+        def __init__(self, game):
             self.skip = turtle.Turtle()
             self.skip.speed(0)
             self.skip.shape("circle")
             self.skip.color("red")
             self.skip.penup()
             self.skip.goto(0, 0)
-            self.skip.dx = 2
-            self.skip.dy = 2
+            self.skip.dx = game.movement
+            self.skip.dy = game.movement
 
         def move(self):
             self.skip.setx(self.skip.xcor() + self.skip.dx)
@@ -56,13 +56,13 @@ class Game:
         def move_left(self):
             x = self.paddle.xcor()
             if x > -350:
-                x -= self.movement
+                x -= self.movement + 50
             self.paddle.setx(x)
 
         def move_right(self):
             x = self.paddle.xcor()
             if x < 350:
-                x += self.movement
+                x += self.movement + 50
             self.paddle.setx(x)
         
         #def update_Qtable(self, game, old_state, action_taken, reward_action_taken, new_state, reached_end):
@@ -72,21 +72,20 @@ class Game:
             actual_q_value_options = self._q_table[old_state[0], old_state[1], old_state[2]]
             actual_q_value = actual_q_value_options[idx_action_taken]
 
-            print("***********")
-            try:
-                future_q_value_options = self._q_table[new_state[0], new_state[1], new_state[2]]
-                future_max_q_value = reward_action_taken  +  self.discount_factor*future_q_value_options.max()
-            except Exception as e:
-                print("error")
+            #future_q_value_options = self._q_table[new_state[0], new_state[1], new_state[2]]
+            #future_max_q_value = reward_action_taken  +  self.discount_factor*future_q_value_options.max()
 
+            print("***********")
+            #print(actual_q_value)
             #temp1 = np.array(new_state)
             #print(new_state)
             #print(type(new_state))
             #print(type(temp1))
             #print(temp1)
-            print(new_state)
-            print(future_q_value_options)
-            print(future_max_q_value)
+            print("old_state" + str(old_state))
+            print("new_state" + str(new_state))
+            #print(future_q_value_options)
+            #print(future_max_q_value)
             
             """
             if reached_end:
@@ -104,11 +103,18 @@ class Game:
         self.window.setup(width=width, height=height)
         self.window.tracer(0)
 
-        rows = ceil(height/movement)
-        columns = ceil(width/movement)
-        self.state_space = np.zeros((columns, columns, rows))
-        self.movement = movement
+        self.rows = ceil(height/movement)
+        self.columns = ceil(width/movement)
+        self.state_space = np.zeros((self.columns, self.columns, self.rows))
 
+        print("height -> " + str(height))
+        print("width -> " + str(width))
+        print("movement -> " + str(movement))
+        print("rows -> " + str(self.rows))
+        print("columns -> " + str(self.columns))
+        print("state_space.shape -> " + str(self.state_space.shape))
+
+        self.movement = movement
         self.episodes_max = episodes_max
         self.lives_max = lives_max
         self.discount_factor = discount_factor
@@ -121,7 +127,7 @@ class Game:
         self.total_reward = 0
 
         self.agent = self.Paddle((0, -250), self)
-        self.ball = self.Ball()
+        self.ball = self.Ball(self)
 
         self.pen = turtle.Turtle()
         self.pen.speed(0)
@@ -142,29 +148,31 @@ class Game:
 
     def show_score(self):
         self.pen.clear()
-        self.pen.write(f"Puntaje: {self.score}, Vidas: {self.agent.lives} / {self.agent.lives_max}, Jugadas: {self.plays}", align="center", font=("Courier", 24, "normal"))
+        #self.pen.write(f"Puntaje: {self.score}, Vidas: {self.agent.lives} / {self.agent.lives_max}, Jugadas: {self.plays}", align="center", font=("Courier", 24, "normal"))
         #self.show_position()
 
     def show_position(self):
         self.pen.clear()
         self.pen.write(f"Paddle: {floor(self.agent.paddle.xcor())}, x: {floor(self.ball.skip.xcor())}, y: {floor(self.ball.skip.ycor())}", align="center", font=("Courier", 18, "normal"))
+        #self.pen.write(f"Paddle: {self.state[0]}, x: {self.state[1]}, y: {self.state[2]}", align="center", font=("Courier", 18, "normal"))
+        #time.sleep(0.4)
 
     def check_collisions(self):
 
         self.show_position()
 
         # Rebote en el borde superior
-        if self.ball.skip.ycor() > 290:
-            self.ball.skip.sety(290)
+        if self.ball.skip.ycor() >= 280:
+            self.ball.skip.sety(280)
             self.ball.bounce_y()
 
         # Rebote en los bordes laterales
-        if self.ball.skip.xcor() > 390 or self.ball.skip.xcor() < -390:
+        if self.ball.skip.xcor() >= 380 or self.ball.skip.xcor() <= -380:
             self.ball.bounce_x()
 
         # Rebote en la paleta
-        if (self.ball.skip.ycor() > -240 and self.ball.skip.ycor() < -230) and \
-           (self.agent.paddle.xcor() + 50 > self.ball.skip.xcor() > self.agent.paddle.xcor() - 50):
+        if (-260 <= self.ball.skip.ycor() <= -230) and \
+           (self.agent.paddle.xcor() - 50 <= self.ball.skip.xcor() <= self.agent.paddle.xcor() + 50):
             self.ball.skip.sety(-230)
             self.ball.bounce_y()
             self.score += 10
@@ -172,7 +180,7 @@ class Game:
             self.show_score()
 
         # Revisar si la pelota toca el borde inferior
-        if self.ball.skip.ycor() < -290:
+        if self.ball.skip.ycor() <= -280:
             self.ball.reset_position()
             self.score -= 10
             self.plays += 1
@@ -180,7 +188,8 @@ class Game:
             self.show_score()
         
         # Actualiza el estado    
-        self.state = (floor(self.agent.paddle.xcor()), floor(self.ball.skip.xcor()), floor(self.ball.skip.ycor()))
+        self.state = (ceil(self.agent.paddle.xcor()/self.movement +self.columns/2), ceil(self.ball.skip.xcor()/self.movement + self.columns/2), ceil(self.ball.skip.ycor()/self.movement +self.rows/2 ))
+        print(self.state)
 
     def reset(self):
         self.state = [0,0,0]
@@ -229,10 +238,10 @@ class Game:
                 else:
                     # Tomar el maximo
                     index_action = np.random.choice(np.flatnonzero(
-                            self.agent._q_table[self.state[0],self.state[1],self.state[2]] == self.agent._q_table[self.state[0],self.state[1],self.state[2]].max()
+                           self.agent._q_table[self.state[0],self.state[1],self.state[2]] == self.agent._q_table[self.state[0],self.state[1],self.state[2]].max()
                         ))
                     next_action = list(self.agent.actions)[index_action]
-            
+                #print(np.flatnonzero(self.agent._q_table.shape))
                 # Toma una accion 
                 self.take_action(next_action)
                 
@@ -240,10 +249,10 @@ class Game:
                 self.check_collisions()
                 
                 # Actualizar la tabla Q
-                self.agent.update_Qtable(next_action, old_state, self.state, self.score)
+                #self.agent.update_Qtable(next_action, old_state, self.state, self.score)
                 
-                break
+                #break
 
 # Ejecutar el juegox
 if __name__ == "__main__":
-    Game(ai=False, episodes_max=10, lives_max=3, width=800, height=600, movement=30, discount_factor = 0.1, learning_rate = 0.1, ratio_exploration = 0.9)
+    Game(ai=False, episodes_max=5000, lives_max=3, width=800, height=600, movement=10, discount_factor = 0.1, learning_rate = 0.1, ratio_exploration = 0.9)
